@@ -8,4 +8,4 @@ function router(app) {
     app.use('/',Product)
 }
 
-module.exports = router
+module.exports = router;
