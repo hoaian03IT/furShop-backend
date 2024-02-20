@@ -1,24 +1,28 @@
 const express = require("express");
 const morgan = require("morgan");
 const bodyParser = require("body-parser");
-const cookieParser = require("cookie-parser")
+const cookieParser = require("cookie-parser");
 const path = require("path");
-const router = require("./router")
-require('dotenv').config();
+const router = require("./router");
+const connectToDB = require("./db/connectToDB");
+require("dotenv").config();
 const port = process.env.PORT || 8080;
 
 const app = express();
-app.use(morgan('combined'))
+app.use(morgan("combined"));
 // body-parser
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended:true}))
+app.use(bodyParser.urlencoded({ extended: true }));
 // express
 app.use(express.json());
-app.use(express.urlencoded({ extended:true}))
+app.use(express.urlencoded({ extended: true }));
 // cookie-parser
 app.use(cookieParser());
 // static file
-app.use(express.static(path.join(__dirname,'public')))
+app.use(express.static(path.join(__dirname, "public")));
+
+// connect to server
+connectToDB();
 
 router(app);
 app.listen(port, () => {
