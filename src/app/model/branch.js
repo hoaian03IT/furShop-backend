@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 const mongooseDelete = require("mongoose-delete");
 
-const CategorySchema = new Schema(
+const BranchSchema = new Schema(
     {
         name: { type: String, required: true },
         description: { type: String },
@@ -10,6 +10,6 @@ const CategorySchema = new Schema(
     { timestamps: true }
 );
 
-CategorySchema.plugin(mongooseDelete, { deletedAt: true, deletedBy: true });
+BranchSchema.plugin(mongooseDelete, { deletedAt: true, deletedBy: true });
 
-module.exports = mongoose.model("Category", CategorySchema);
+module.exports = mongoose.model("Branch", BranchSchema);
