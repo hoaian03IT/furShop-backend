@@ -74,7 +74,7 @@ class Account {
 
         const { username, role, email, phone, gender, image } = newUser;
 
-        res.status(200).json({ user: { username, role, email, phone, gender, image, token: accessToken } });
+        return res.status(200).json({ user: { username, role, email, phone, gender, image, token: accessToken } });
     }
 }
 
