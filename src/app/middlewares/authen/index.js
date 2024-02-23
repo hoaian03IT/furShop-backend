@@ -1,13 +1,14 @@
 const jwt = require("jsonwebtoken");
-const { ACCESS_TOKEN } = process.env;
 
 function authen(req, res, next) {
-    const token = req.headers["authorization"].split(" ")[0];
-    if (!token) return res.status(401).json({ title: "Lỗi", message: "token rỗng" });
-    jwt.verify(token, ACCESS_TOKEN, (err, data) => {
+    const token = req.headers["authorization"].split(" ")[1];
+    console.log(token);
+    if (!token) return res.status(401).json({ title: "Lỗi", message: "Token rỗng" });
+    jwt.verify(token, process.env.ACCESS_TOKEN, (err, user) => {
         if (err) {
             return res.status(401).json({ title: "Lỗi", message: "Token không hợp lệ" });
         }
+        req.user = user;
         next();
     });
 }
