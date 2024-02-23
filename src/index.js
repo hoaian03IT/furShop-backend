@@ -6,6 +6,7 @@ const path = require("path");
 const router = require("./router");
 const connectToDB = require("./db/connectToDB");
 require("dotenv").config();
+const cors = require("cors");
 const port = process.env.PORT || 8080;
 
 const app = express();
@@ -20,6 +21,12 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 // static file
 app.use(express.static(path.join(__dirname, "public")));
+
+// cors
+const corsOption = {
+    origin: "*",
+};
+app.use(cors(corsOption));
 
 // connect to server
 connectToDB();
