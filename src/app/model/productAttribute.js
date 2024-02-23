@@ -7,8 +7,8 @@ const serverPort = process.env.PORT || 8080;
 const ProductAttributeSchema = new Schema(
     {
         image: { type: String, default: `http://${serverName}:${serverPort}/hinh-anh?image=product-dafault.jpg` },
-        color: { type: String },
-        size: { type: String },
+        color: { type: String, required: true },
+        size: { type: String, required: true },
         quantity: { type: Number, default: 0 },
     },
     { timestamps: true }
