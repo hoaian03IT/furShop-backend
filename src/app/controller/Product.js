@@ -39,5 +39,27 @@ class Product {
             res.status(500).json({ message: error.message });
         }
     }
+
+    async getProduct(req, res) {
+        try {
+            const { id } = req.params;
+            const existedProduct = await ProductModel.exists({ _id: id });
+            if (!existedProduct) {
+                return res.status(400).json({
+                    title: "Lỗi",
+                    message: "Sản phẩm không hợp lệ",
+                });
+            }
+            // populate(field, fieldSelection) - fieldSelection includes _id field
+            const product = await ProductModel.findById(id)
+                .populate("attributes", "image color size quantity")
+                .populate("branch", "name description")
+                .populate("category", "name description")
+                .select("productName price rate description branch category attributes discount");
+            res.status(200).json(product);
+        } catch (error) {
+            res.status(500).json({ message: error.message });
+        }
+    }
 }
 module.exports = new Product();
