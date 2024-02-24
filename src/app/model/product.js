@@ -12,11 +12,11 @@ const ProductSchema = new Schema(
         category: { type: mongoose.Schema.Types.ObjectId, ref: "Category" },
         attributes: [{ type: mongoose.Schema.Types.ObjectId, ref: "ProductAttribute" }],
         discount: { type: Number, default: 0 },
+        image:{type:Array}
     },
     { timestamps: true }
 );
 
-ProductSchema.plugin(mongooseDelete, { deletedAt: true, deletedBy: true });
-const ProductModel = mongoose.model("Product", ProductSchema);
+ProductSchema.plugin(mongooseDelete, { deletedAt: true, deletedBy: true,overrideMethods:true });
 
-module.exports = ProductModel;
+module.exports = mongoose.model("Product", ProductSchema);

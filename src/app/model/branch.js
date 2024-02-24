@@ -10,6 +10,6 @@ const BranchSchema = new Schema(
     { timestamps: true }
 );
 
-BranchSchema.plugin(mongooseDelete, { deletedAt: true, deletedBy: true });
+BranchSchema.plugin(mongooseDelete, { deletedAt: true, deletedBy: true,overrideMethods:true });
 
 module.exports = mongoose.model("Branch", BranchSchema);

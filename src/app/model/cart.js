@@ -6,8 +6,9 @@ const CartSchema = new Schema({
    amount:{type:Number,default:0},
    customerId:{type:mongoose.Schema.Types.ObjectId,ref:'Account'},
    productId:{type:mongoose.Schema.Types.ObjectId,ref:'Product'},
+   productAttribues:{type:mongoose.Schema.Types.ObjectId,ref:'ProductAttribute'}
 },{timestamps:true})
 
-CartSchema.plugin(mongooseDelete,{deletedAt:true,deletedBy:true})
+CartSchema.plugin(mongooseDelete,{deletedAt:true,deletedBy:true,overrideMethods:true})
 
 module.exports = mongoose.model('Cart',CartSchema)

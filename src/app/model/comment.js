@@ -9,6 +9,6 @@ const CommentSchema = new Schema({
     star:{type:Number,require:true}
 },{timestamps:true})
 
-CommentSchema.plugin(mongooseDelete,{deletedAt:true,deletedBy:true})
+CommentSchema.plugin(mongooseDelete,{deletedAt:true,deletedBy:true,overrideMethods:true})
 
 module.exports = mongoose.model('Comment',CommentSchema)

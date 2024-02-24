@@ -10,6 +10,6 @@ const CategorySchema = new Schema(
     { timestamps: true }
 );
 
-CategorySchema.plugin(mongooseDelete, { deletedAt: true, deletedBy: true });
+CategorySchema.plugin(mongooseDelete, { deletedAt: true, deletedBy: true ,overrideMethods:true});
 
 module.exports = mongoose.model("Category", CategorySchema);

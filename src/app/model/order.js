@@ -10,9 +10,10 @@ const OrderSchema = new Schema({
    name:{type:String,required:true},
    address:{type:String,required:true},
    phoneNumber:{type:String,required:true},
+   productAttribute:{type:mongoose.Schema.Types.ObjectId,ref:'ProductAttribute'},
 
 },{timestamps:true})
 
-OrderSchema.plugin(mongooseDelete,{deletedAt:true,deletedBy:true})
+OrderSchema.plugin(mongooseDelete,{deletedAt:true,deletedBy:true,overrideMethods:true})
 
 module.exports = mongoose.model('Order',OrderSchema)
