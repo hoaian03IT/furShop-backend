@@ -3,12 +3,12 @@ const Cart = require('../model/cart')
 class CartComtroller{
     async upload(req,res,next){
         try {
-            const {amount,customerId,productId} = req.data;
+            const {amount,customerId,productId,productAttribues} = req.data;
             if(amount<=0) return res.status(401).json({
                 title:"Lỗi",
                 message:"Số lượng sản phẩm phải lớn hơn 0"
             })
-            const newCart = new Cart({amount,customerId,productId})
+            const newCart = new Cart({amount,customerId,productId,productAttribues})
             const data = await newCart.save()
             if(data) return res.status(200).json({
                 title:"Thành công",
