@@ -8,9 +8,9 @@ const ProductSchema = new Schema(
         price: { type: Number, required: true },
         rate: { type: Array, default: [] },
         description: { type: String },
-        branch: { type: mongoose.Schema.Types.ObjectId, ref: "Branch" },
-        category: { type: mongoose.Schema.Types.ObjectId, ref: "Category" },
-        attributes: [{ type: mongoose.Schema.Types.ObjectId, ref: "ProductAttribute" }],
+        branch: { type: mongoose.Schema.ObjectId, ref: "Branch" },
+        category: { type: mongoose.Schema.ObjectId, ref: "Category" },
+        attributes: [{ type: mongoose.Schema.ObjectId, ref: "ProductAttribute" }],
         discount: { type: Number, default: 0 },
         image:{type:Array}
     },

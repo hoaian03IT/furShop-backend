@@ -75,7 +75,6 @@ class Product {
                 pageSize = PAGE_SIZE,
                 page = 1,
             } = req.query;
-
             const queryFilter =
                 searchQuery && searchQuery !== "all"
                     ? {
@@ -88,19 +87,19 @@ class Product {
 
             const categoryFilter = category && category !== "all" ? { category } : {};
             const priceFilter =
-                price && price.split("-")[0] === "over"
-                    ? {
-                          price: {
-                              $gte: Number(price.split("-")[1]), // greatest
-                          },
-                      }
-                    : price !== "all"
-                    ? {
-                          price: {
-                              $gte: Number(price.split("-")[0]), // greatest
-                              $lte: Number(price.split("-")[1]) || -1, // least
-                          },
-                      }
+                price && price !== "all"
+                    ? price.split("-")[0] === "over"
+                        ? {
+                              price: {
+                                  $gte: Number(price.split("-")[1]), // greatest
+                              },
+                          }
+                        : {
+                              price: {
+                                  $gte: Number(price.split("-")[0]), // greatest
+                                  $lte: Number(price.split("-")[1]) || -1, // least
+                              },
+                          }
                     : {};
             const branchFilter = branch && branch !== "all" ? { branch } : {};
             const sortOrder =
@@ -113,7 +112,7 @@ class Product {
                     : order === "highest"
                     ? { price: -1 }
                     : order === "newest"
-                    ? { createdA: -1 }
+                    ? { createdAt: -1 }
                     : { _id: 1 };
 
             const products = await ProductModel.find({
@@ -128,7 +127,8 @@ class Product {
                 .populate("attributes", "image color size quantity")
                 .populate("branch", "name description")
                 .populate("category", "name description")
-                .select("productName price rate description branch category attributes discount");
+                .select("productName price rate description branch category attributes discount")
+                .exec();
 
             const countProducts = await ProductModel.countDocuments({
                 ...queryFilter,
