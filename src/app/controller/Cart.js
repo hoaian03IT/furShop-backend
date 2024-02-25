@@ -3,7 +3,9 @@ const Cart = require('../model/cart')
 class CartComtroller{
     async upload(req,res,next){
         try {
-            const {amount,customerId,productId,productAttribues} = req.data;
+            console.log();
+            const {amount,customerId,productId,productAttribues} = req.body;
+            
             if(amount<=0) return res.status(401).json({
                 title:"Lỗi",
                 message:"Số lượng sản phẩm phải lớn hơn 0"
@@ -15,12 +17,12 @@ class CartComtroller{
                 message:'Thêm sản phẩm thành công',
                 data
             })
-            return res.status(error.status).json({
+            return res.status(403).json({
                 title:'Lỗi',
                 message: "Cập nhật thất bại"
             })
         } catch (error) {
-            return res.status(error.status).json({
+            return res.status(500).json({
                 title:'Lỗi',
                 message: error.message
             })
@@ -28,9 +30,9 @@ class CartComtroller{
     }
     async get(req, res) {
         try {
-            const {customerId,pageNumber = 1,limit} = req.query;
+            const {customerId,pageNumber = 1,limit = 5} = req.query;
             const start = (pageNumber - 1) * limit;
-            const data = await Cart.find({customerId}).skip(start).limit(limit)
+            const data = await Cart.find({customerId:customerId}).skip(start).limit(limit).populate("productId productAttribues")
             return res.status(200).json({
                 title:"Thành công",
                 message: "Xem giỏ hàng",
@@ -45,7 +47,7 @@ class CartComtroller{
     }
     async destroy(req, res) {
         try {
-            const {cartId} = req.data;
+            const {cartId} = req.body;
             const data = await Cart.deleteOne({_id:cartId})
             return res.status(200).json({
                 title:"Thành công",
