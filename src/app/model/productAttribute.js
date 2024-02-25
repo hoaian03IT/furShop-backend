@@ -14,7 +14,7 @@ const ProductAttributeSchema = new Schema(
     { timestamps: true }
 );
 
-ProductAttributeSchema.plugin(mongooseDelete, { deletedAt: true, deletedBy: true });
-const ProductAttributeModel = mongoose.model("ProductAttribute", ProductAttributeSchema);
+ProductAttributeSchema.plugin(mongooseDelete, { deletedAt: true, deletedBy: true,overrideMethods:true });
 
-module.exports = ProductAttributeModel;
+module.exports =  mongoose.model("ProductAttribute", ProductAttributeSchema);
+

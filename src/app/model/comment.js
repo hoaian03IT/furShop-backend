@@ -12,6 +12,6 @@ const CommentSchema = new Schema(
     { timestamps: true }
 );
 
-CommentSchema.plugin(mongooseDelete, { deletedAt: true, deletedBy: true });
+CommentSchema.plugin(mongooseDelete, { deletedAt: true, deletedBy: true, overrideMethods: true });
 
 module.exports = mongoose.model("Comment", CommentSchema);

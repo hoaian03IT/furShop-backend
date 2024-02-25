@@ -18,6 +18,6 @@ const AccountSchema = new Schema(
     { timestamps: true }
 );
 
-AccountSchema.plugin(mongooseDelete, { deletedAt: true, deletedBy: true });
+AccountSchema.plugin(mongooseDelete, { deletedAt: true, deletedBy: true,overrideMethods:true });
 
 module.exports = mongoose.model("Account", AccountSchema);
