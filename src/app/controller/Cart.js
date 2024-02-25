@@ -4,13 +4,13 @@ class CartComtroller{
     async upload(req,res,next){
         try {
             console.log();
-            const {amount,customerId,productId,productAttribues} = req.body;
+            const {amount,customerId,productId,productAttributes} = req.body;
             
             if(amount<=0) return res.status(401).json({
                 title:"Lỗi",
                 message:"Số lượng sản phẩm phải lớn hơn 0"
             })
-            const newCart = new Cart({amount,customerId,productId,productAttribues})
+            const newCart = new Cart({amount,customerId,productId,productAttributes})
             const data = await newCart.save()
             if(data) return res.status(200).json({
                 title:"Thành công",
@@ -32,7 +32,7 @@ class CartComtroller{
         try {
             const {customerId,pageNumber = 1,limit = 5} = req.query;
             const start = (pageNumber - 1) * limit;
-            const data = await Cart.find({customerId:customerId}).skip(start).limit(limit).populate("productId productAttribues")
+            const data = await Cart.find({customerId:customerId}).skip(start).limit(limit).populate("productId productAttributes")
             return res.status(200).json({
                 title:"Thành công",
                 message: "Xem giỏ hàng",
