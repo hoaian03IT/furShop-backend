@@ -86,7 +86,7 @@ class Account {
 
             const { username, role, email, phone, gender, image } = newUser;
 
-            return res.status(200).json({ username, role, email, phone, gender, image, token: accessToken });
+            return res.status(200).json({ user: { username, role, email, phone, gender, image, token: accessToken } });
         } catch (error) {
             res.status(500).json({ message: error.message });
         }
@@ -138,7 +138,7 @@ class Account {
             });
 
             const { username, role, email, phone, gender, image } = user;
-            return res.status(200).json({ username, role, email, phone, gender, image, token: accessToken });
+            return res.status(200).json({ user: { username, role, email, phone, gender, image, token: accessToken } });
         } catch (error) {
             res.status(500).json({ message: error.message });
         }
