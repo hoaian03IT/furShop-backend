@@ -6,7 +6,8 @@ const getImage = (req, res, next) =>{
     fs.readFile(path, (err, data) =>{
         if(err) return res.status(404).json({
             title:'not found',
-            message: 'dont find image have this path name: ' + path
+            message: 'dont find image have this path name: ' + path,
+            hi:err.message
         })
         return res.end(data)
     })

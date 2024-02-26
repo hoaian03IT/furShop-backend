@@ -1,4 +1,4 @@
-const BranchModel = require("../model/branch");
+const BrandModel = require("../model/brand");
 const CategoryModel = require("../model/category");
 const ProductAttributeModel = require("../model/productAttribute");
 const ProductModel = require("../model/product");
@@ -6,15 +6,15 @@ const ProductModel = require("../model/product");
 class Product {
     async createProduct(req, res) {
         try {
-            const { productName, price, description, branchId, categoryId, discount, attributes } = req.body;
-            const existedBranch = await BranchModel.exists({ _id: branchId });
-            if (!existedBranch) {
+            const { productName, price, description, brandId, categoryId, discount, attributes } = req.body;
+            const existedBrand = await BrandModel.findById(brandId);
+            if (!existedBrand) {
                 return res.status(400).json({
                     title: "Lỗi",
                     message: "Thương hiệu không hợp lệ",
                 });
             }
-            const existedCategory = await CategoryModel.exists({ _id: categoryId });
+            const existedCategory = await CategoryModel.findById(categoryId);
             if (!existedCategory) {
                 return res.status(400).json({
                     title: "Lỗi",
@@ -22,18 +22,25 @@ class Product {
                 });
             }
 
+            const quantity = attributes?.reduce((acc, curr) => acc + curr.quantity, 0);
+
             const newAttributes = (await ProductAttributeModel.insertMany(attributes)).map((attr) => attr._id);
-            console.log(newAttributes);
 
             await ProductModel.create({
                 productName,
                 price,
                 description,
                 discount,
-                branch: branchId,
+                brand: brandId,
                 category: categoryId,
                 attributes: newAttributes,
             });
+
+            await BrandModel.findByIdAndUpdate(existedBrand._id, { quantity: existedBrand.quantity + quantity });
+            await CategoryModel.findByIdAndUpdate(existedCategory._id, {
+                quantity: existedCategory.quantity + quantity,
+            });
+
             res.status(200).json({ title: "Thành công", message: "Tạo sản phẩm thành công" });
         } catch (error) {
             res.status(500).json({ message: error.message });
@@ -53,9 +60,9 @@ class Product {
             // populate(field, fieldSelection) - fieldSelection includes _id field
             const product = await ProductModel.findById(id)
                 .populate("attributes", "image color size quantity")
-                .populate("branch", "name description")
+                .populate("brand", "name description")
                 .populate("category", "name description")
-                .select("productName price rate description branch category attributes discount");
+                .select("productName price rate description brand category attributes discount");
             res.status(200).json(product);
         } catch (error) {
             res.status(500).json({ message: error.message });
@@ -68,9 +75,8 @@ class Product {
             const {
                 category = "",
                 order = "",
-                branch = "",
+                brand = "",
                 price = "",
-                type = "",
                 query: searchQuery = "",
                 pageSize = PAGE_SIZE,
                 page = 1,
@@ -101,7 +107,8 @@ class Product {
                               },
                           }
                     : {};
-            const branchFilter = branch && branch !== "all" ? { branch } : {};
+            const brandFilter = brand && brand !== "all" ? { brand } : {};
+            console.log(brandFilter);
             const sortOrder =
                 order === "asc"
                     ? { productName: 1 }
@@ -119,22 +126,22 @@ class Product {
                 ...queryFilter,
                 ...categoryFilter,
                 ...priceFilter,
-                ...branchFilter,
+                ...brandFilter,
             })
                 .sort(sortOrder)
                 .skip(pageSize * (page - 1))
                 .limit(pageSize)
                 .populate("attributes", "image color size quantity")
-                .populate("branch", "name description")
+                .populate("brand", "name description")
                 .populate("category", "name description")
-                .select("productName price rate description branch category attributes discount")
+                .select("productName price rate description brand category attributes discount")
                 .exec();
 
             const countProducts = await ProductModel.countDocuments({
                 ...queryFilter,
                 ...categoryFilter,
                 ...priceFilter,
-                ...branchFilter,
+                ...brandFilter,
             });
 
             res.status(200).json({

@@ -8,15 +8,15 @@ const ProductSchema = new Schema(
         price: { type: Number, required: true },
         rate: { type: Array, default: [] },
         description: { type: String },
-        branch: { type: mongoose.Schema.ObjectId, ref: "Branch" },
+        brand: { type: mongoose.Schema.ObjectId, ref: "Brand" },
         category: { type: mongoose.Schema.ObjectId, ref: "Category" },
         attributes: [{ type: mongoose.Schema.ObjectId, ref: "ProductAttribute" }],
         discount: { type: Number, default: 0 },
-        image:{type:Array}
+        image: { type: Array },
     },
     { timestamps: true }
 );
 
-ProductSchema.plugin(mongooseDelete, { deletedAt: true, deletedBy: true,overrideMethods:true });
+ProductSchema.plugin(mongooseDelete, { deletedAt: true, deletedBy: true, overrideMethods: true });
 
 module.exports = mongoose.model("Product", ProductSchema);

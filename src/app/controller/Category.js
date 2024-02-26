@@ -1,5 +1,4 @@
 const CategoryModel = require("../model/category");
-const ProductModel = require("../model/product");
 
 class Category {
     async createCategory(req, res) {
@@ -15,6 +14,7 @@ class Category {
             await CategoryModel.create({
                 name: newCategory,
                 description,
+                quantity: 0,
             });
 
             res.status(200).json({
@@ -27,15 +27,25 @@ class Category {
     }
     async getAll(req, res) {
         try {
-            const data = await ProductModel.aggregate({
-                $lookup: { from: "Category", localField: "category", foreignField: "_id", as: "categoryId" },
-            });
+            const categories = await CategoryModel.find({}).select("image name description quantity").sort("-quantity");
 
-            res.status(200).json({ data });
+            res.status(200).json({ categories });
         } catch (error) {
             res.status(500).json({ message: error.message });
         }
     }
+
+    async filterCategory(req, res) {
+        try {
+            const { query } = req.query;
+            const categories = await CategoryModel.find({ name: { $regex: query, $option: "i" } });
+            res.status(200).json({ categories });
+        } catch (error) {
+            res.status(500).json({ message: error.message });
+        }
+    }
+
+    async getMost(req, res) {}
 }
 
 module.exports = new Category();
