@@ -11,13 +11,13 @@ const AccountSchema = new Schema(
         role: { type: String, default: "customer" },
         email: { type: String, default: null, unique: true },
         phone: { type: String, default: null },
-        gender: { type: Number, default: null },
+        gender: { type: Number, default: null }, // 0 nam 1 nu 2 khac
         image: { type: String, default: `http://${serverName}:${serverPort}/hinh-anh?image=avatar-dafault.jpg` },
         token: [{ type: String }],
     },
     { timestamps: true }
 );
 
-AccountSchema.plugin(mongooseDelete, { deletedAt: true, deletedBy: true,overrideMethods:true });
+AccountSchema.plugin(mongooseDelete, { deletedAt: true, deletedBy: true, overrideMethods: true });
 
 module.exports = mongoose.model("Account", AccountSchema);

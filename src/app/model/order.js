@@ -12,6 +12,7 @@ const OrderSchema = new Schema(
         address: { type: String, required: true },
         phoneNumber: { type: String, required: true },
         productAttribute: { type: mongoose.Schema.Types.ObjectId, ref: "ProductAttribute" },
+        state: { type: Boolean, default: false },
     },
     { timestamps: true }
 );
