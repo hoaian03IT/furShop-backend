@@ -96,18 +96,14 @@ class Account {
 
     async login(req, res) {
         try {
-            const { email: emailPayload, password } = req.body;
-            if (!isEmail(emailPayload))
-                return res.status(403).json({
-                    title: "Lỗi cú pháp",
-                    message: "Email không hợp lệ",
-                });
+            const { username: usernamePayload, password } = req.body;
+
             if (!checkPassword(password))
                 return res.status(403).json({
                     title: "Lỗi cú pháp",
                     message: "Mật khẩu không hợp lệ",
                 });
-            let user = await AccountModal.findOne({ email: emailPayload });
+            let user = await AccountModal.findOne({ username: usernamePayload });
             if (!user) {
                 return res.status(403).json({
                     title: "Lỗi ",
