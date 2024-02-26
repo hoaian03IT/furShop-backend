@@ -32,7 +32,8 @@ class CartComtroller {
     }
     async get(req, res) {
         try {
-            const { customerId, pageNumber = 1, limit = 5 } = req.query;
+            const { pageNumber = 1, limit = 5 } = req.query;
+            const { _id: customerId } = req.user;
             const start = (pageNumber - 1) * limit;
             const data = await Cart.find({ customerId: customerId })
                 .skip(start)
