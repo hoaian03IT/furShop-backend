@@ -69,10 +69,13 @@ class CartComtroller {
   }
   async get(req, res) {
     try {
-      const { customerId, pageNumber = 1, limit = 5 } = req.query;
+      const { pageNumber = 1, limit = 5 } = req.query;
+      const { _id } = req.user;
       const start = (pageNumber - 1) * limit;
-      const data = await Cart.find({ customerId }).skip(start).limit(limit);
-      const quantity = await Cart.countDocuments({ customerId });
+      const data = await Cart.find({ customerId: _id })
+        .skip(start)
+        .limit(limit);
+      const quantity = await Cart.countDocuments({ customerId: _id });
       const numberPage =
         Math.floor(quantity / limit) + (quantity % limit) !== 0 ? 1 : 0;
       return res.status(200).json({
