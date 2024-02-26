@@ -84,9 +84,11 @@ class Account {
                 expires: new Date(Date.now() + 30 * 24 * 3600000), // 30 days
             });
 
-            const { username, role, email, phone, gender, image } = newUser;
+            const { username, role, email, phone, gender, image, _id } = newUser;
 
-            return res.status(200).json({ user: { username, role, email, phone, gender, image, token: accessToken } });
+            return res
+                .status(200)
+                .json({ user: { _id, username, role, email, phone, gender, image }, token: accessToken });
         } catch (error) {
             res.status(500).json({ message: error.message });
         }
@@ -137,8 +139,10 @@ class Account {
                 expires: new Date(Date.now() + 30 * 24 * 3600000), // 30 days
             });
 
-            const { username, role, email, phone, gender, image } = user;
-            return res.status(200).json({ user: { username, role, email, phone, gender, image, token: accessToken } });
+            const { username, role, email, phone, gender, image, _id } = user;
+            return res
+                .status(200)
+                .json({ user: { _id, username, role, email, phone, gender, image }, token: accessToken });
         } catch (error) {
             res.status(500).json({ message: error.message });
         }
