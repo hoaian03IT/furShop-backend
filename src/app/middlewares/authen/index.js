@@ -2,7 +2,6 @@ const jwt = require("jsonwebtoken");
 
 function authen(req, res, next) {
     const token = req.headers["authorization"].split(" ")[1];
-    console.log(token);
     if (!token) return res.status(401).json({ title: "Lỗi", message: "Token rỗng" });
     jwt.verify(token, process.env.ACCESS_TOKEN, (err, user) => {
         if (err) {

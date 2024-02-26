@@ -3,15 +3,22 @@ const Schema = mongoose.Schema;
 const mongooseDelete = require("mongoose-delete");
 
 const CartSchema = new Schema(
-    {
-        amount: { type: Number, default: 0 },
-        customerId: { type: mongoose.Schema.Types.ObjectId, ref: "Account" },
-        productId: { type: mongoose.Schema.Types.ObjectId, ref: "Product" },
-        productAttribues: { type: mongoose.Schema.Types.ObjectId, ref: "ProductAttribute" },
+  {
+    amount: { type: Number, default: 0 },
+    customerId: { type: mongoose.Schema.Types.ObjectId, ref: "Account" },
+    productId: { type: mongoose.Schema.Types.ObjectId, ref: "Product" },
+    productAttributes: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "ProductAttribute",
     },
-    { timestamps: true }
+  },
+  { timestamps: true }
 );
 
-CartSchema.plugin(mongooseDelete, { deletedAt: true, deletedBy: true, overrideMethods: true });
+CartSchema.plugin(mongooseDelete, {
+  deletedAt: true,
+  deletedBy: true,
+  overrideMethods: true,
+});
 
 module.exports = mongoose.model("Cart", CartSchema);
