@@ -102,26 +102,22 @@ class Account {
     }
   }
 
-  async login(req, res) {
-    try {
-      const { email: emailPayload, password } = req.body;
-      if (!isEmail(emailPayload))
-        return res.status(403).json({
-          title: "Lỗi cú pháp",
-          message: "Email không hợp lệ",
-        });
-      if (!checkPassword(password))
-        return res.status(403).json({
-          title: "Lỗi cú pháp",
-          message: "Mật khẩu không hợp lệ",
-        });
-      let user = await AccountModal.findOne({ email: emailPayload });
-      if (!user) {
-        return res.status(403).json({
-          title: "Lỗi ",
-          message: "Email hoặc mật khẩu không đúng",
-        });
-      }
+    async login(req, res) {
+        try {
+            const { username: usernamePayload, password } = req.body;
+
+            if (!checkPassword(password))
+                return res.status(403).json({
+                    title: "Lỗi cú pháp",
+                    message: "Mật khẩu không hợp lệ",
+                });
+            let user = await AccountModal.findOne({ username: usernamePayload });
+            if (!user) {
+                return res.status(403).json({
+                    title: "Lỗi ",
+                    message: "Email hoặc mật khẩu không đúng",
+                });
+            }
 
       const isMatchPW = await bcrypt.compare(password, user.password);
       if (!isMatchPW) {
