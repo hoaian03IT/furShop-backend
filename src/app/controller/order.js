@@ -1,4 +1,6 @@
+const category = require("../model/category");
 const Order = require("../model/order");
+const Product = require("../model/product");
 const ProductAttribute = require("../model/productAttribute");
 
 class OrderController {
@@ -12,9 +14,7 @@ class OrderController {
         phoneNumber,
         paymentType = 0,
       } = req.body;
-      console.log(req.body);
       let PromiseSave = [];
-      let PromiseUpdate = [];
       for (let i = 0; i < product.length; i++) {
         const {
           productId = null,
@@ -55,15 +55,16 @@ class OrderController {
           { $inc: { quantity: -amount } },
           { new: true }
         );
+        const productCategory = await Product.findById(productId);
+        const updateCategory = await category.updateOne(
+          { _id: productCategory?.category },
+          { $inc: { quantity: -amount } }
+        );
         PromiseSave.push(saveOrder);
-        PromiseUpdate.push(updateProduct);
+        PromiseSave.push(updateProduct);
       }
-      const [data, updateNumber] = await Promise.all([
-        ...PromiseSave,
-        ...PromiseUpdate,
-      ]);
-      console.log(data);
-      console.log(updateNumber);
+      const [data, updateNumber] = await Promise.all([...PromiseSave]);
+
       return res.status(200).json({
         message: "thanh cong",
         success: true,
@@ -127,15 +128,22 @@ class OrderController {
         return res.status(400).json({ message: "thong tin khong hop le" });
       }
       const deleteOrder = Order.deleteById(orderId);
-      const { amount } = await Order.findById(orderId);
+      const { amount, productId } = await Order.findById(orderId).populate(
+        "productId"
+      );
+      const updateCategory = category.updateOne(
+        { _id: productId?.category },
+        { $inc: { quantity: amount } }
+      );
       const updateProductAttribute = ProductAttribute.updateOne(
         { _id: productAttributeId },
         { $inc: { quantity: amount } },
         { new: true }
       );
-      const [data, update] = await Promise.all([
+      const [data, update, categoryQuantity] = await Promise.all([
         deleteOrder,
         updateProductAttribute,
+        updateCategory,
       ]);
       if (data.modifiedCount && update.modifiedCount)
         return res.status(200).json({
@@ -144,7 +152,7 @@ class OrderController {
           data,
           update,
         });
-      return res.status(500).json({ success: "xu ly that bai" });
+      return res.status(400).json({ success: "xu ly that bai" });
     } catch (err) {
       return res.status(500).json({ message: err.message });
     }

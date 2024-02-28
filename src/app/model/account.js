@@ -5,19 +5,26 @@ const serverName = require("os").hostname();
 const serverPort = process.env.PORT || 8080;
 
 const AccountSchema = new Schema(
-    {
-        username: { type: String, required: true, unique: true },
-        password: { type: String, required: true },
-        role: { type: String, default: "customer" },
-        email: { type: String, default: null, unique: true },
-        phone: { type: String, default: null },
-        gender: { type: Number, default: null }, // 0 nam 1 nu 2 khac
-        image: { type: String, default: `http://${serverName}:${serverPort}/hinh-anh?image=avatar-dafault.jpg` },
-        token: [{ type: String }],
+  {
+    username: { type: String, required: true, unique: true },
+    password: { type: String, required: true },
+    role: { type: String, default: "customer" },
+    email: { type: String, default: null, unique: true },
+    phone: { type: String, default: null },
+    gender: { type: Number, default: null }, // 0 nam 1 nu 2 khac
+    image: {
+      type: String,
+      default: `http://${serverName}:${serverPort}/api/hinh-anh?image=avatar-dafault.jpg`,
     },
-    { timestamps: true }
+    token: [{ type: String }],
+  },
+  { timestamps: true }
 );
 
-AccountSchema.plugin(mongooseDelete, { deletedAt: true, deletedBy: true, overrideMethods: true });
+AccountSchema.plugin(mongooseDelete, {
+  deletedAt: true,
+  deletedBy: true,
+  overrideMethods: true,
+});
 
 module.exports = mongoose.model("Account", AccountSchema);
