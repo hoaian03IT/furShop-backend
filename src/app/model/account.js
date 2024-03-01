@@ -6,7 +6,7 @@ const serverPort = process.env.PORT || 8080;
 
 const AccountSchema = new Schema(
     {
-        username: { type: String, required: true, unique: true },
+        username: { type: String, unique: true },
         password: { type: String, required: true },
         role: { type: String, default: "customer" },
         email: { type: String, default: null, unique: true },

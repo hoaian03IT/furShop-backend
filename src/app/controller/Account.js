@@ -70,7 +70,7 @@ class Account {
                 gender: genderPayload,
             });
 
-            await AccountModal.findByIdAndUpdate(newUser._id, { username: user + newUser._id });
+            await AccountModal.findByIdAndUpdate(newUser._id, { username: "user" + newUser._id });
 
             // create tokens
             const refreshToken = generateRefreshToken(newUser._id);
