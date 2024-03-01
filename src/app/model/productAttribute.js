@@ -5,16 +5,22 @@ const serverName = require("os").hostname();
 const serverPort = process.env.PORT || 8080;
 
 const ProductAttributeSchema = new Schema(
-    {
-        image: { type: String, default: `http://${serverName}:${serverPort}/hinh-anh?image=product-dafault.jpg` },
-        color: { type: String, required: true },
-        size: { type: String, required: true },
-        quantity: { type: Number, default: 0 },
+  {
+    image: {
+      type: String,
+      default: `http://${serverName}:${serverPort}/api/hinh-anh?image=product-default.png`,
     },
-    { timestamps: true }
+    color: { type: String, required: true },
+    size: { type: String, required: true },
+    quantity: { type: Number, default: 0 },
+  },
+  { timestamps: true }
 );
 
-ProductAttributeSchema.plugin(mongooseDelete, { deletedAt: true, deletedBy: true,overrideMethods:true });
+ProductAttributeSchema.plugin(mongooseDelete, {
+  deletedAt: true,
+  deletedBy: true,
+  overrideMethods: true,
+});
 
-module.exports =  mongoose.model("ProductAttribute", ProductAttributeSchema);
-
+module.exports = mongoose.model("ProductAttribute", ProductAttributeSchema);

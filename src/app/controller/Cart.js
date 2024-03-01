@@ -42,6 +42,12 @@ class CartController {
     async update(req, res) {
         try {
             const { cartId, amount } = req.body;
+            if (amount <= 0) {
+                return res.status(401).json({
+                    title: "Lỗi",
+                    message: "Số lượng sản phẩm phải lớn hơn 0",
+                });
+            }
             if (!cartId)
                 return res.status(400).json({
                     title: "Lỗi",
@@ -68,14 +74,16 @@ class CartController {
         try {
             const { pageNumber = 1, limit = 5 } = req.query;
             const { _id } = req.user;
-            console.log(req.user);
             const start = (pageNumber - 1) * limit;
-            const data = await Cart.find({ customerId: _id })
+            const data = await Cart.find({ customerId: _id, amount: { $gt: 0 } })
                 .skip(start)
                 .limit(limit)
                 .populate("productId")
                 .populate("productAttributes");
-            const quantity = await Cart.countDocuments({ customerId: _id });
+            const quantity = await Cart.countDocuments({
+                customerId: _id,
+                amount: { $gt: 0 },
+            });
             const numberPage = Math.floor(quantity / limit) + (quantity % limit) !== 0 ? 1 : 0;
             return res.status(200).json({
                 title: "Thành công",
