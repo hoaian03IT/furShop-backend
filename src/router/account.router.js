@@ -7,5 +7,6 @@ router.post("/dang-ky", AccountController.register);
 router.post("/dang-nhap", AccountController.login);
 router.post("/auth/dang-xuat", authen, AccountController.logout);
 router.get("/refresh-token/:id", AccountController.refreshToken);
+router.get("/auth/doi-mat-khau", authen, AccountController.changePassword);
 
 module.exports = router;

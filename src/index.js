@@ -24,11 +24,10 @@ app.use(express.static(path.join(__dirname, "public")));
 
 // cors
 const corsOption = {
-  origin: "http://localhost:3000",
-  methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
-  preflightContinue: false,
-  optionsSuccessStatus: 204,
-  credentials: true,
+    origin: "http://localhost:3000",
+    methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
+    credentials: true,
+    optionSuccessStatus: 200,
 };
 app.use(cors(corsOption));
 
@@ -37,5 +36,5 @@ connectToDB();
 
 router(app);
 app.listen(port, () => {
-  console.log(`Example app listening on port ${port}`);
+    console.log(`Example app listening on port ${port}`);
 });

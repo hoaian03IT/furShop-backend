@@ -10,7 +10,7 @@ const AccountSchema = new Schema(
         password: { type: String, required: true },
         role: { type: String, default: "customer" },
         email: { type: String, default: null, unique: true },
-        phone: { type: String, default: null },
+        phone: { type: String, default: null, unique: true },
         gender: { type: Number, default: null }, // 0 nam 1 nu 2 khac
         image: {
             type: String,

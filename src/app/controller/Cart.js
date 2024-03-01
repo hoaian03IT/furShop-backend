@@ -1,9 +1,10 @@
 const Cart = require("../model/cart");
 
-class CartComtroller {
+class CartController {
     async upload(req, res, next) {
         try {
-            const { amount, customerId, productId, productAttributes } = req.body;
+            const { _id: customerId } = req.user;
+            const { amount, productId, productAttributes } = req.body;
             if (!amount || !customerId || !productId || !productAttributes) {
                 return res.status(400).json({
                     title: "Lỗi",
@@ -69,7 +70,11 @@ class CartComtroller {
             const { _id } = req.user;
             console.log(req.user);
             const start = (pageNumber - 1) * limit;
-            const data = await Cart.find({ customerId: _id }).skip(start).limit(limit);
+            const data = await Cart.find({ customerId: _id })
+                .skip(start)
+                .limit(limit)
+                .populate("productId")
+                .populate("productAttributes");
             const quantity = await Cart.countDocuments({ customerId: _id });
             const numberPage = Math.floor(quantity / limit) + (quantity % limit) !== 0 ? 1 : 0;
             return res.status(200).json({
@@ -114,4 +119,4 @@ class CartComtroller {
     }
 }
 
-module.exports = new CartComtroller();
+module.exports = new CartController();
