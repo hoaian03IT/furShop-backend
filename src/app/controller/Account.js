@@ -38,13 +38,13 @@ class Account {
                     message: "Email đã tồn tại",
                 });
 
-            const hasExistUsername = await AccountModal.exists({
-                username: usernamePayload,
+            const hasExistPhoneNumber = await AccountModal.exists({
+                phone: phonePayload,
             });
-            if (hasExistUsername)
+            if (hasExistPhoneNumber)
                 return res.status(403).json({
                     title: "Lỗi cú pháp",
-                    message: "Username đã tồn tại",
+                    message: "Số điện thoại đã được sử dụng",
                 });
 
             if (!userRoles.includes(rolePayload))
