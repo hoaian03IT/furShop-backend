@@ -7,6 +7,7 @@ class Product {
     async createProduct(req, res) {
         try {
             const { productName, price, description, brandId, categoryId, discount, attributes } = req.body;
+            const { _id } = req.user;
             const existedBrand = await BrandModel.findById(brandId);
             if (!existedBrand) {
                 return res.status(400).json({
@@ -27,6 +28,7 @@ class Product {
             const newAttributes = (await ProductAttributeModel.insertMany(attributes)).map((attr) => attr._id);
 
             await ProductModel.create({
+                provider: _id,
                 productName,
                 price,
                 description,
@@ -110,7 +112,6 @@ class Product {
                           }
                     : {};
             const brandFilter = brand && brand !== "all" ? { brand } : {};
-            console.log(brandFilter);
             const sortOrder =
                 order === "asc"
                     ? { productName: 1 }
