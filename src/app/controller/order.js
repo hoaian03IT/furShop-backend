@@ -14,6 +14,7 @@ class OrderController {
         phoneNumber,
         paymentType = 0,
       } = req.body;
+      // const {_id:customerId} = req.user
       let PromiseSave = [];
       for (let i = 0; i < product.length; i++) {
         const {
@@ -28,6 +29,7 @@ class OrderController {
           return res
             .status(400)
             .json({ message: `San pham da co id: ${productId} het hang` });
+        // console.log(name, amount, productAttributeId,customerId, productAttribute, quantity);
         if (
           !name ||
           !productId ||
