@@ -254,6 +254,29 @@ class Account {
             res.status(500).json({ message: error.message });
         }
     }
+
+    async updateProfile(req, res) {
+        try {
+            const {
+                image: imagePayload,
+                username: usernamePayload,
+                phone: phonePayload,
+                gender: genderPayload,
+            } = req.body;
+            const { _id: userId } = req.user;
+            const user = await AccountModal.findByIdAndUpdate(_id, {
+                image: imagePayload,
+                username: usernamePayload,
+                phone: phonePayload,
+                gender: Number(genderPayload),
+            });
+
+            const { username, role, email, phone, gender, image, _id } = user;
+            res.status(200).json({ username, role, email, phone, gender, image, _id });
+        } catch (error) {
+            res.status(500).json({ message: error.message });
+        }
+    }
 }
 
 module.exports = new Account();
