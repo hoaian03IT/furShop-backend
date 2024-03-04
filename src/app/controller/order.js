@@ -27,9 +27,7 @@ class OrderController {
           productAttributeId
         );
         if (quantity <= 0)
-          return res
-            .status(400)
-            .json({ message: `San pham da co id: ${productId} het hang` });
+          continue;
         // console.log(name, amount, productAttributeId,customerId, productAttribute, quantity);
         if (
           !name ||
@@ -67,10 +65,11 @@ class OrderController {
         PromiseSave.push(updateProduct);
       }
       const [data, updateNumber] = await Promise.all([...PromiseSave]);
-      await cart.deleteMany();
+      const cartDelete = await cart.delete({});
       return res.status(200).json({
         message: "thanh cong",
         success: true,
+        data:cartDelete
       });
     } catch (error) {
       return res.status(500).json({ message: error.message });
