@@ -264,7 +264,7 @@ class Account {
                 gender: genderPayload,
             } = req.body;
             const { _id: userId } = req.user;
-            const user = await AccountModal.findByIdAndUpdate(_id, {
+            const user = await AccountModal.findByIdAndUpdate(userId, {
                 image: imagePayload,
                 username: usernamePayload,
                 phone: phonePayload,
