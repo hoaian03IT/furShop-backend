@@ -20,7 +20,7 @@ class CartController {
             const data = await Cart.findOneAndUpdate(
                 { customerId, productId, productAttributes },
                 { amount: amount },
-                { upsert: true, new: true }
+                { upsert: true  }
             )
                 .populate("productId")
                 .populate("productAttributes");
@@ -44,6 +44,7 @@ class CartController {
     async update(req, res) {
         try {
             const { cartId, amount } = req.body;
+            const {_id}=req.user;
             if (amount <= 0) {
                 return res.status(401).json({
                     title: "Lỗi",
@@ -55,7 +56,7 @@ class CartController {
                     title: "Lỗi",
                     message: "Không tìm thấy Id cart",
                 });
-            const data = await Cart.updateOne({ _id: cartId }, { amount: amount }, { new: true });
+            const data = await Cart.updateOne({ _id: cartId,customerId:_id }, { amount: amount }, { new: true });
             if (data.modifiedCount)
                 return res.status(200).json({
                     success: true,
@@ -103,7 +104,7 @@ class CartController {
     }
     async destroy(req, res) {
         try {
-            const { cartId } = req.body;
+            const { id:cartId } = req.params;
             if (!cartId)
                 return res.status(400).json({
                     title: "Lỗi",
@@ -121,7 +122,7 @@ class CartController {
                 message: "Xóa thất bại",
             });
         } catch (error) {
-            return res.status(error.status).json({
+            return res.status(500).json({
                 title: "Lỗi",
                 message: error.message,
             });
