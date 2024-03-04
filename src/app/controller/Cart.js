@@ -25,22 +25,21 @@ class CartController {
                 .populate("productId")
                 .populate("productAttributes");
 
-            if (data.upsertedCount <= 0 && data.modifiedCount <= 0)
-                return res.status(400).json({
-                    title: "Thất bại",
-                    message: "Thêm sản phẩm thất bại",
-                });
-            return res.status(200).json({
-                title: "Thành công",
-                data,
-            });
-        } catch (error) {
-            return res.status(500).json({
-                title: "Lỗi",
-                message: error.message,
-            });
-        }
-    }
+      if (data.upsertedCount <= 0 && data.modifiedCount <= 0)
+        return res.status(400).json({
+          title: "Thất bại",
+          message: "Thêm sản phẩm thất bại",
+        });
+      return res.status(200).json({
+        title: "Thành công",
+        data,
+      });
+    } catch (error) {
+      return res.status(500).json({
+        title: "Lỗi",
+        message: error.message,
+      });
+    }}
     async update(req, res) {
         try {
             const { cartId, amount } = req.body;
@@ -73,35 +72,36 @@ class CartController {
             });
         }
     }
-    async get(req, res) {
-        try {
-            const { pageNumber = 1, limit = 5 } = req.query;
-            const { _id } = req.user;
-            const start = (pageNumber - 1) * limit;
-            const data = await Cart.find({ customerId: _id, amount: { $gt: 0 } })
-                .skip(start)
-                .limit(limit)
-                .populate("productId")
-                .populate("productAttributes");
-            const quantity = await Cart.countDocuments({
-                customerId: _id,
-                amount: { $gt: 0 },
-            });
-            const numberPage = Math.floor(quantity / limit) + (quantity % limit) !== 0 ? 1 : 0;
-            return res.status(200).json({
-                title: "Thành công",
-                message: "Xem giỏ hàng",
-                data: data,
-                numberPage,
-                currentPage: pageNumber,
-            });
-        } catch (error) {
-            return res.status(500).json({
-                title: "Lỗi",
-                message: error.message,
-            });
-        }
-    }
+  
+  async get(req, res) {
+    try {
+      const { pageNumber = 1, limit = 5 } = req.query;
+      const { _id } = req.user;
+      const start = (pageNumber - 1) * limit;
+      const data = await Cart.find({ customerId: _id, amount: { $gt: 0 } })
+        .skip(start)
+        .limit(limit)
+        .populate("productId")
+        .populate("productAttributes");
+      const quantity = await Cart.countDocuments({
+        customerId: _id,
+        amount: { $gt: 0 },
+      });
+      const numberPage =
+        Math.floor(quantity / limit) + (quantity % limit) !== 0 ? 1 : 0;
+      return res.status(200).json({
+        title: "Thành công",
+        message: "Xem giỏ hàng",
+        data: data,
+        numberPage,
+        currentPage: pageNumber,
+      });
+    } catch (error) {
+      return res.status(500).json({
+        title: "Lỗi",
+        message: error.message,
+      });
+    }}
     async destroy(req, res) {
         try {
             const { id:cartId } = req.params;
@@ -128,6 +128,7 @@ class CartController {
             });
         }
     }
-}
+  }
+
 
 module.exports = new CartController();

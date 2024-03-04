@@ -1,3 +1,4 @@
+const cart = require("../model/cart");
 const category = require("../model/category");
 const Order = require("../model/order");
 const Product = require("../model/product");
@@ -66,7 +67,7 @@ class OrderController {
         PromiseSave.push(updateProduct);
       }
       const [data, updateNumber] = await Promise.all([...PromiseSave]);
-
+      await cart.deleteMany();
       return res.status(200).json({
         message: "thanh cong",
         success: true,
@@ -125,7 +126,7 @@ class OrderController {
 
   async cancelOrder(req, res) {
     try {
-      const { orderId, productAttributeId } = req.body;
+      const { orderId, productAttributeId } = req.query;
       if (!orderId || !productAttributeId) {
         return res.status(400).json({ message: "thong tin khong hop le" });
       }
