@@ -20,12 +20,11 @@ class CartController {
             const data = await Cart.findOneAndUpdate(
                 { customerId, productId, productAttributes },
                 { amount: amount },
-                { upsert: true  }
+                { upsert: true,new:true  }
             )
                 .populate("productId")
                 .populate("productAttributes");
-
-      if (data.upsertedCount <= 0 && data.modifiedCount <= 0)
+      if (data?.upsertedCount <= 0 && data?.modifiedCount <= 0)
         return res.status(400).json({
           title: "Thất bại",
           message: "Thêm sản phẩm thất bại",
@@ -88,7 +87,7 @@ class CartController {
         amount: { $gt: 0 },
       });
       const numberPage =
-        Math.floor(quantity / limit) + (quantity % limit) !== 0 ? 1 : 0;
+        Math.ceil(quantity / limit);
       return res.status(200).json({
         title: "Thành công",
         message: "Xem giỏ hàng",
