@@ -107,7 +107,7 @@ class CartController {
   }
   async destroy(req, res) {
     try {
-      const { cartId } = req.body;
+      const { id: cartId } = req.params;
       if (!cartId)
         return res.status(400).json({
           title: "Lỗi",
