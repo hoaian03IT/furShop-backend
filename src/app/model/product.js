@@ -7,7 +7,6 @@ const ProductSchema = new Schema(
         shop: { type: mongoose.Types.ObjectId, ref: "Shop", required: true },
         productName: { type: String, default: "Chưa cập nhật tên" },
         price: { type: Number, required: true },
-        rate: { type: Array, default: [] },
         description: { type: String },
         brand: { type: mongoose.Schema.ObjectId, ref: "Brand" },
         category: { type: mongoose.Schema.ObjectId, ref: "Category" },
