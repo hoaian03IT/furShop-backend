@@ -5,7 +5,6 @@ class CartController {
     try {
       const { _id: customerId } = req.user;
       const { amount, productId, productAttributes } = req.body;
-      console.log(amount);
       if (!amount || !customerId || !productId || !productAttributes) {
         return res.status(400).json({
           title: "Lỗi",
@@ -20,9 +19,11 @@ class CartController {
 
       const data = await Cart.findOneAndUpdate(
         { customerId, productId, productAttributes },
-        { $inc: { amount: amount } },
+        { amount: amount },
         { upsert: true, new: true }
-      );
+      )
+        .populate("productId")
+        .populate("productAttributes");
 
       if (data.upsertedCount <= 0 && data.modifiedCount <= 0)
         return res.status(400).json({
@@ -105,6 +106,7 @@ class CartController {
       });
     }
   }
+
   async destroy(req, res) {
     try {
       const { id: cartId } = req.params;

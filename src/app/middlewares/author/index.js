@@ -1,15 +1,14 @@
 const Account = require("../../model/account");
 
-async function checkRole(req) {
-    const userName = req.body.userName || req.query.userName;
-    const account = await Account.findOne({ userName: userName });
+async function checkRole(_id) {
+    const account = await Account.findById(_id);
     return account.role;
 }
 
 async function adminRole(req, res, next) {
-    const role = await checkRole(req);
+    const role = await checkRole(req.user._id);
     if (role === "admin") {
-        next();
+        return next();
     }
     return res.status(401).json({
         title: "không đủ quyền",
@@ -17,9 +16,10 @@ async function adminRole(req, res, next) {
     });
 }
 async function providerRole(req, res, next) {
-    const role = await checkRole(req);
+    const role = await checkRole(req.user._id);
     if (role === "provider" || role === "admin") {
-        next();
+        req.role = role;
+        return next();
     }
     return res.status(401).json({
         title: "không đủ quyền",
