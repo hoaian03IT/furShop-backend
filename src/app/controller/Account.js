@@ -3,6 +3,7 @@ const { generateRefreshToken, generateAccessToken } = require("../../utils/gener
 const isEmail = require("../../utils/isEmail");
 const checkPassword = require("../../utils/checkPassword");
 const AccountModal = require("../model/account");
+const ShopModal = require("../model/shop");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 
@@ -70,6 +71,13 @@ class Account {
                 gender: genderPayload,
             });
 
+            if (role === "provider") {
+                await ShopModal.create({
+                    owner: newUser._id,
+                    tagname: "shop" + newUser._id,
+                    name: "Cửa hàng của " + newUser.name,
+                });
+            }
             await AccountModal.findByIdAndUpdate(newUser._id, { username: "user" + newUser._id });
 
             // create tokens
@@ -236,7 +244,7 @@ class Account {
         try {
             const { _id } = req.user;
             const { password, newPassword } = req.body;
-            console.log(_id,password,newPassword);
+            console.log(_id, password, newPassword);
             const user = await AccountModal.findById(_id);
             const isMatchPW = await bcrypt.compare(password, user.password);
 
