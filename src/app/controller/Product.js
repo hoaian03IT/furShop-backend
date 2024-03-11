@@ -66,6 +66,7 @@ class Product {
                 .populate("attributes", "image color size quantity")
                 .populate("brand", "name description")
                 .populate("category", "name description")
+                .populate("shop", "name tagname")
                 .select("productName price rate description brand category attributes discount");
             res.status(200).json(product);
         } catch (error) {
@@ -137,7 +138,8 @@ class Product {
                 .populate("attributes", "image color size quantity")
                 .populate("brand", "name description")
                 .populate("category", "name description")
-                .select("productName price rate description brand category attributes discount")
+                .populate("shop", "name tagname")
+                .select("productName price rate description brand category attributes discount shop")
                 .exec();
 
             const countProducts = await ProductModel.countDocuments({
@@ -166,6 +168,25 @@ class Product {
             });
         } catch (error) {
             return res.status(500).json({ message: error.message });
+        }
+    }
+
+    async searchProduct(req, res) {
+        try {
+            const { name, color, size } = req.query;
+
+            console.log(name);
+
+            const res = await ProductModel.find({
+                productName: {
+                    $regex: name,
+                    $options: "i",
+                },
+            });
+
+            res.status(200).json(res);
+        } catch (error) {
+            res.status(500).json({ message: error.message });
         }
     }
 }

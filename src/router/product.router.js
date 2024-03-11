@@ -7,5 +7,6 @@ router.get("/loc-san-pham", Product.filterProduct);
 router.get("/lay-san-pham-moi", Product.getProducts);
 router.get("/:id", Product.getProduct);
 router.post("/tao-moi", authen, Product.createProduct);
+router.get("/tim-kiem", Product.searchProduct);
 
 module.exports = router;

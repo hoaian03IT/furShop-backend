@@ -257,22 +257,18 @@ class Account {
 
     async updateProfile(req, res) {
         try {
-            const {
-                image: imagePayload,
-                username: usernamePayload,
-                phone: phonePayload,
-                gender: genderPayload,
-            } = req.body;
+            const { image, username, phone, gender } = req.body;
             const { _id: userId } = req.user;
-            const user = await AccountModal.findByIdAndUpdate(userId, {
-                image: imagePayload,
-                username: usernamePayload,
-                phone: phonePayload,
-                gender: Number(genderPayload),
+            await AccountModal.findByIdAndUpdate(userId, {
+                image,
+                username,
+                phone,
+                gender: Number(gender),
             });
 
-            const { username, role, email, phone, gender, image, _id } = user;
-            res.status(200).json({ username, role, email, phone, gender, image, _id });
+            const user = await AccountModal.findById(userId).select("username role email phone gender image _id");
+
+            res.status(200).json({ ...user._doc });
         } catch (error) {
             res.status(500).json({ message: error.message });
         }

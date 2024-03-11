@@ -5,5 +5,6 @@ const authen = require("../app/middlewares/authen");
 const { providerRole } = require("../app/middlewares/author");
 
 router.post("/tao-cua-hang", authen, providerRole, Shop.createShop);
+router.get("/thong-tin", Shop.getInfo);
 
 module.exports = router;
