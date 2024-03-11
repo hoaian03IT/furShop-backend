@@ -6,6 +6,7 @@ const Cart = require("./cart.router");
 const Brand = require("./brand.router");
 const Order = require("./order.router");
 const Shop = require("./shop.router");
+const Comment = require("./comment.router");
 
 function router(app) {
     app.use("/api/hinh-anh", getImage);
@@ -16,6 +17,7 @@ function router(app) {
     app.use("/api/san-pham", Product);
     app.use("/api/don-hang", Order);
     app.use("/api/cua-hang", Shop);
+    app.use("/api/binh-luan", Comment);
 }
 
 module.exports = router;
