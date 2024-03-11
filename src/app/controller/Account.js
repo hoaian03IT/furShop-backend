@@ -236,6 +236,7 @@ class Account {
         try {
             const { _id } = req.user;
             const { password, newPassword } = req.body;
+            console.log(_id,password,newPassword);
             const user = await AccountModal.findById(_id);
             const isMatchPW = await bcrypt.compare(password, user.password);
 
