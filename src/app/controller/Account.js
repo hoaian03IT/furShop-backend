@@ -71,7 +71,7 @@ class Account {
                 gender: genderPayload,
             });
 
-            if (role === "provider") {
+            if (rolePayload === "provider") {
                 await ShopModal.create({
                     owner: newUser._id,
                     tagname: "shop" + newUser._id,

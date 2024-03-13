@@ -2,6 +2,7 @@ const BrandModel = require("../model/brand");
 const CategoryModel = require("../model/category");
 const ProductAttributeModel = require("../model/productAttribute");
 const ProductModel = require("../model/product");
+const ShopModal = require("../model/shop");
 
 class Product {
     async createProduct(req, res) {
@@ -26,16 +27,18 @@ class Product {
             const quantity = attributes?.reduce((acc, curr) => acc + curr.quantity, 0);
 
             const newAttributes = (await ProductAttributeModel.insertMany(attributes)).map((attr) => attr._id);
+            const shop = await ShopModal.findOne({ owner: _id });
 
             await ProductModel.create({
                 provider: _id,
                 productName,
                 price,
                 description,
-                discount,
+                discount: discount / 100,
                 brand: brandId,
                 category: categoryId,
                 attributes: newAttributes,
+                shop: shop._id,
             });
 
             await BrandModel.findByIdAndUpdate(existedBrand._id, {
